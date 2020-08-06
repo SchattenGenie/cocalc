@@ -648,14 +648,6 @@ spec:
         - containerPort: 6000
           name: "local-hub"
           protocol: TCP
-      livenessProbe:
-        httpGet:
-          path: /health
-          port: 6001 # port number configured in Dockerfile and supervisord.conf
-        initialDelaySeconds: 60
-        periodSeconds: 30
-        timeoutSeconds: 10
-        failureThreshold: 20
       resources:
         limits:
           cpu: "{cores}"
@@ -666,12 +658,18 @@ spec:
       volumeMounts:
         - name: home
           mountPath: /home/user
+        - name: share
+          mountPath: /home/user/share          
   automountServiceAccountToken: false
   volumes:
     - name: home
       nfs:
          server: {nfs_server_ip}
          path: "/{project_id}"
+    - name: share
+      nfs:
+         server: {nfs_server_ip}
+         path: "/share"         
 """.format(
             pod_name=pod_name,
             project_id=self.project_id,
