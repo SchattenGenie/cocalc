@@ -115,17 +115,23 @@ async function launch_kernel_spec(
   const argv = kernel_spec.argv.map((x) =>
     x.replace("{connection_file}", connection_file)
   );
-
+  const runtimeDir = jupyter_paths.runtimeDir();
+  const out = fs.openSync(path.join(runtimeDir, "kernel-" + config.key + ".log"), 'a');
+  const err = fs.openSync(path.join(runtimeDir, "kernel-" + config.key + ".err"), 'a');
   const full_spawn_options = { ...DEFAULT_SPAN_OPTIONS, ...spawn_options };
-
+  full_spawn_options.stdio = ['ignore', out, err];
   full_spawn_options.env = {
     ...process.env,
     ...kernel_spec.env,
     ...spawn_options.env,
   };
-
+  console.log(argv[0]);
+  console.log(argv.slice(1));
+  console.log(full_spawn_options);
+  console.log('Now my debug messages are written to the console!');
+  console.log("runtimeDir ", runtimeDir);
+  console.log(config);
   const running_kernel = execa(argv[0], argv.slice(1), full_spawn_options);
-
   if (full_spawn_options.cleanupConnectionFile !== false) {
     running_kernel.on("exit", (_code, _signal) => cleanup(connection_file));
     running_kernel.on("error", (_code, _signal) => cleanup(connection_file));
