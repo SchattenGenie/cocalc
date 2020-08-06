@@ -42,8 +42,9 @@ import { map } from "awaiting";
 
 import { nbgrader, jupyter_strip_notebook } from "../../jupyter/nbgrader/api";
 import {
-  extract_auto_scores,
-  NotebookScores,
+    create_autograde_ipynb,
+    extract_auto_scores,
+    NotebookScores,
 } from "../../jupyter/nbgrader/autograde";
 
 import {
@@ -1646,6 +1647,16 @@ ${details}
         }
         console.log("nbgrader started 1 ", { student_id, file, student_path, assignment, grade_project_id});
         console.log("nbgrader started 2 ", { NBGRADER_TIMEOUT_MS, NBGRADER_CELL_TIMEOUT_MS});
+        const autograde_ipynb = create_autograde_ipynb(
+            instructor_ipynb,
+            student_ipynb
+        );
+        await this.write_autograded_notebook(
+            assignment,
+             student_id,
+             "to_grade_" + file,
+             autograde_ipynb
+        );
         const r = await nbgrader({
           timeout_ms: NBGRADER_TIMEOUT_MS, // default timeout for total notebook
             //store.getIn(
@@ -1664,12 +1675,6 @@ ${details}
           student_id: student_id,
           filename: file
         });
-        await this.write_autograded_notebook(
-             assignment,
-             student_id,
-             "graded_file_" + file,
-             r.autograde
-        );
         console.log("nbgrader finished successfully ", {
           student_id,
           file,
@@ -1711,12 +1716,6 @@ ${details}
       const r = result[filename];
       if (r == null) continue;
       if (r.output == null) continue;
-      await this.write_autograded_notebook(
-         assignment,
-         student_id,
-         "graded_file_" + filename,
-         r.autograde
-      );
       // Depending on instructor options, write the graded version of
       // the notebook to disk, so the student can see why their grade
       // is what it is:
