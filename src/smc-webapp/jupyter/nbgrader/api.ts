@@ -59,12 +59,6 @@ export async function nbgrader(
     max_time_per_cell_ms: opts.cell_timeout_ms,
     max_total_time_ms: opts.timeout_ms,
   };
-  await this.write_autograded_notebook(
-     opts.assignment,
-     opts.student_id,
-     "graded_file_" + opts.filename,
-     autograde_ipynb
-  );
   console.log("nbgrader limits ", { limits });
   const graded_ipynb = await jupyter_run_notebook(opts.project_id, {
     path: opts.path,

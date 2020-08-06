@@ -1644,7 +1644,8 @@ ${details}
         } finally {
           this.course_actions.clear_activity(id);
         }
-        console.log("nbgrader started ", { student_id, file, student_path, assignment, grade_project_id});
+        console.log("nbgrader started 1 ", { student_id, file, student_path, assignment, grade_project_id});
+        console.log("nbgrader started 2 ", { NBGRADER_TIMEOUT_MS, NBGRADER_CELL_TIMEOUT_MS});
         const r = await nbgrader({
           timeout_ms: NBGRADER_TIMEOUT_MS, // default timeout for total notebook
             //store.getIn(
@@ -1663,6 +1664,12 @@ ${details}
           student_id: student_id,
           filename: file
         });
+        await this.write_autograded_notebook(
+             assignment,
+             student_id,
+             "graded_file_" + file,
+             r.autograde
+        );
         console.log("nbgrader finished successfully ", {
           student_id,
           file,
