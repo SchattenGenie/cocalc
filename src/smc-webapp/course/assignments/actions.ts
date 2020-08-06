@@ -11,10 +11,10 @@ Actions involving working with assignments:
 export const STUDENT_SUBDIR = "student";
 
 // default timeout of 1 minute per cell
-export const NBGRADER_CELL_TIMEOUT_MS: number = 60 * 1000;
+export const NBGRADER_CELL_TIMEOUT_MS: number = 60 * 60 * 1000;
 
 // default timeout of 10 minutes for whole notebooks
-export const NBGRADER_TIMEOUT_MS: number = 10 * 60 * 1000;
+export const NBGRADER_TIMEOUT_MS: number = 60 * 60 * 1000;
 
 import { Map } from "immutable";
 
@@ -1640,7 +1640,7 @@ ${details}
           )}'s project is running`,
         });
         try {
-          await start_project(grade_project_id, 60);
+          await start_project(grade_project_id, 60 * 10);
         } finally {
           this.course_actions.clear_activity(id);
         }
