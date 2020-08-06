@@ -6,6 +6,7 @@
 import { project_api, start_project } from "../../frame-editors/generic/client";
 
 import { create_autograde_ipynb } from "./autograde";
+import {AssignmentRecord} from "../../course/store";
 
 export interface NBGraderAPIOptions {
   // Project will try to evaluate/autograde for this many milliseconds;
@@ -31,16 +32,23 @@ export interface NBGraderAPIOptions {
 
   // Project in which to run grading.
   project_id: string;
+
+  assignment: AssignmentRecord;
+
+  student_id: string;
+
+  filename: string
 }
 
 export interface NBGraderAPIResponse {
   output: any; // no clue yet.
+  autograde: any;
 }
 
 export async function nbgrader(
   opts: NBGraderAPIOptions
 ): Promise<NBGraderAPIResponse> {
-  // console.log("nbgrader", opts);
+  console.log("nbgrader ", opts);
   const autograde_ipynb = create_autograde_ipynb(
     opts.instructor_ipynb,
     opts.student_ipynb
@@ -51,7 +59,13 @@ export async function nbgrader(
     max_time_per_cell_ms: opts.cell_timeout_ms,
     max_total_time_ms: opts.timeout_ms,
   };
-  // console.log("nbgrader", { limits });
+  await this.write_autograded_notebook(
+     opts.assignment,
+     opts.student_id,
+     "graded_file_" + opts.filename,
+     autograde_ipynb
+  );
+  console.log("nbgrader limits ", { limits });
   const graded_ipynb = await jupyter_run_notebook(opts.project_id, {
     path: opts.path,
     ipynb: autograde_ipynb,
@@ -59,7 +73,7 @@ export async function nbgrader(
     limits,
   });
 
-  return { output: graded_ipynb };
+  return { output: graded_ipynb, autograde: autograde_ipynb};
 }
 
 export async function jupyter_strip_notebook(

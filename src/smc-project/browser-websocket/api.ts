@@ -52,7 +52,7 @@ export function init_websocket_api(
       logger.debug("primus-api", "request", typeof data, JSON.stringify(data));
       try {
         const resp = await handle_api_call(client, data, primus, logger);
-        //logger.debug("primus-api", "response", resp);
+        logger.debug("primus-api", "response", resp);
         done(resp);
       } catch (err) {
         // put this in for debugging...

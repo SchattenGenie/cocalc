@@ -14,7 +14,7 @@ export async function jupyter_run_notebook(
   logger,
   opts: RunNotebookOptions
 ): Promise<string> {
-  logger.debug("jupyter_run_notebook", trunc_middle(JSON.stringify(opts)));
+  logger.debug("jupyter_run_notebook ", trunc_middle(JSON.stringify(opts)));
   const notebook: JupyterNotebook = JSON.parse(opts.ipynb);
   const name = notebook.metadata.kernelspec.name;
   const jupyter = kernel({

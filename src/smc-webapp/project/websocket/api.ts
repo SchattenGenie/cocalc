@@ -235,7 +235,7 @@ export class API {
         query,
         options,
       },
-      10000
+      50000
     );
     // console.log("synctable_channel", query, options, channel_name);
     return this.conn.channel(channel_name);
@@ -246,7 +246,7 @@ export class API {
   async syncdoc_call(
     path: string,
     mesg: { [field: string]: any },
-    timeout_ms: number = 30000 // ms timeout for call
+    timeout_ms: number = 100000 // ms timeout for call
   ): Promise<any> {
     return await this.call({ cmd: "syncdoc_call", path, mesg }, timeout_ms);
   }
@@ -262,14 +262,14 @@ export class API {
 
   // Use the nbgrader "protocol" to autograde a notebook
   async nbgrader(opts: NBGraderAPIOptions): Promise<any> {
-    return await this.call({ cmd: "nbgrader", opts }, opts.timeout_ms + 5000);
+    return await this.call({ cmd: "nbgrader", opts }, 60 * 60 * 1000 + 5000);
   }
 
   // Get contents of an ipynb file, but with output and attachments removed (to save space)
   async jupyter_strip_notebook(ipynb_path: string): Promise<any> {
     return await this.call(
       { cmd: "jupyter_strip_notebook", ipynb_path },
-      15000
+      60 * 60 * 1000 // TODO: changed by Vlad
     );
   }
 
@@ -279,7 +279,7 @@ export class API {
   // input is dumb.
 
   async jupyter_run_notebook(opts: RunNotebookOptions): Promise<string> {
-    const max_total_time_ms = opts.limits?.max_total_time_ms ?? 20 * 60 * 1000;
+    const max_total_time_ms = 60 * 60 * 1000;  // TODO: changed by Vlad opts.limits?.max_total_time_ms ?? 60 * 60 * 1000;
     return await this.call(
       { cmd: "jupyter_run_notebook", opts },
       max_total_time_ms
