@@ -1641,7 +1641,7 @@ ${details}
           )}'s project is running`,
         });
         try {
-          await start_project(grade_project_id, 60 * 10);
+          await start_project(grade_project_id, 60 * 60); // 1 hour wait for start project
         } finally {
           this.course_actions.clear_activity(id);
         }
