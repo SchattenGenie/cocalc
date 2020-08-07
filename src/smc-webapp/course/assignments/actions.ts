@@ -1682,7 +1682,7 @@ ${details}
         });
         result[file] = r;
       } catch (err) {
-        console.log("nbgrader failed ", { student_id, file, err });
+        console.log("nbgrader failed ", { student_id, file, grade_project_id, err });
         scores[file] = `${err}`;
       } finally {
         console.log("nbgrader clear activity ");

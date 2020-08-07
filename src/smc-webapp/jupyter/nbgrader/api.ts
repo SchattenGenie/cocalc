@@ -54,8 +54,8 @@ export async function nbgrader(
     opts.student_ipynb
   );
   const limits = {
-    max_total_output: 30000000,
-    max_output_per_cell: 5000000,
+    max_total_output: 3000000000000,
+    max_output_per_cell: 500000000000,
     max_time_per_cell_ms: opts.cell_timeout_ms,
     max_total_time_ms: opts.timeout_ms,
   };
