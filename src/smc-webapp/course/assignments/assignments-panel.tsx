@@ -1432,7 +1432,7 @@ class Assignment extends Component<AssignmentProps, AssignmentState> {
       const t = this.props.nbgrader_run_info.get(
         this.props.assignment.get("assignment_id")
       );
-      if (t && new Date().valueOf() - t <= 1000 * 60 * 40) {
+      if (t && new Date().valueOf() - t <= 1000 * 60 * 45) {
         // Time starting is set and it's also within the last few minutes.
         // This "few minutes" is just in case -- we probably shouldn't need
         // that at all ever, but it could make cocalc state usable in case of
