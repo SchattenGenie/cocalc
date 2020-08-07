@@ -331,19 +331,21 @@ export class JupyterKernel extends EventEmitter
       if (DEBUG) {
         this.dbg("IOPUB", 100000)(JSON.stringify(mesg));
       }
-
+      console.log("iopub  ", JSON.stringify(mesg));
       if (mesg.content != null && mesg.content.execution_state != null) {
+        console.log("iopub  emit ", JSON.stringify(mesg));
         this.emit("execution_state", mesg.content.execution_state);
       }
 
       if (
         (mesg.content != null ? mesg.content.comm_id : undefined) !== undefined
       ) {
+        console.log("iopub  comm message ", JSON.stringify(mesg));
         // A comm message, which gets handled directly.
         try {
             this.process_comm_message_from_kernel(mesg);
         } catch (e) {
-            console.log("process_comm_message_from_kernel CATCH ", JSON.stringify(mesg));
+            console.log("process_comm_message_from_kernel CATCH ");
         }
 
         return;

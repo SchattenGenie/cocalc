@@ -44,7 +44,7 @@ export async function jupyter_run_notebook(
 
       // TODO: limits on size; also should we worry about combining
       // adjacent messages.
-      logger.debug("jupyter_run_notebook code ", code);
+      logger.debug("jupyter_run_notebook code ", cell);
       const result = await jupyter.execute_code_now({
         code,
         timeout_ms,
