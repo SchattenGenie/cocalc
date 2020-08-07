@@ -116,11 +116,11 @@ async function launch_kernel_spec(
     x.replace("{connection_file}", connection_file)
   );
 
-  //const runtimeDir = jupyter_paths.runtimeDir();
-  //const out = fs.openSync(path.join(runtimeDir, "kernel-" + config.key + ".log"), 'a');
-  //const err = fs.openSync(path.join(runtimeDir, "kernel-" + config.key + ".err"), 'a');
+  const runtimeDir = jupyter_paths.runtimeDir();
+  const out = fs.openSync(path.join(runtimeDir, "kernel-" + config.key + ".log"), 'a');
+  const err = fs.openSync(path.join(runtimeDir, "kernel-" + config.key + ".err"), 'a');
   const full_spawn_options = { ...DEFAULT_SPAN_OPTIONS, ...spawn_options };
-  // full_spawn_options.stdio = ['ignore', out, err];
+  full_spawn_options.stdio = ['ignore', out, err];
   full_spawn_options.env = {
     ...process.env,
     ...kernel_spec.env,

@@ -26,7 +26,7 @@ echo=(content, cb) -> setTimeout((->cb(undefined, '389'+content.prompt)), 1000)
 */
 
 //const DEBUG = true; // only for extreme deebugging.
-const DEBUG = false; // normal mode
+const DEBUG = true; // normal mode
 
 export const VERSION = "5.3";
 
@@ -340,7 +340,12 @@ export class JupyterKernel extends EventEmitter
         (mesg.content != null ? mesg.content.comm_id : undefined) !== undefined
       ) {
         // A comm message, which gets handled directly.
-        this.process_comm_message_from_kernel(mesg);
+        try {
+            this.process_comm_message_from_kernel(mesg);
+        } catch (e) {
+            console.log("process_comm_message_from_kernel CATCH ", mesg);
+        }
+
         return;
       }
 
@@ -663,6 +668,7 @@ export class JupyterKernel extends EventEmitter
       opts.halt_on_error = true;
     }
     if (this._state === "closed") {
+      console.log("execute_code_now ", this._state);
       throw Error("closed");
     }
     await this._ensure_running();
@@ -845,7 +851,8 @@ export class JupyterKernel extends EventEmitter
   }
 
   process_comm_message_from_kernel(mesg): void {
-    const dbg = this.dbg("process_comm_message_from_kernel");
+    const dbg = this.dbg("process_comm_message_from_kernel ");
+    console.log("process_comm_message_from_kernel ", mesg)
     dbg(mesg);
     this._actions.process_comm_message_from_kernel(mesg);
   }

@@ -48,6 +48,7 @@ export async function jupyter_run_notebook(
         code,
         timeout_ms,
       });
+      logger.debug("jupyter_run_notebook result ", result);
       if (opts.nbgrader) {
         // Only process output for autograder cells.
         const is_autograde =

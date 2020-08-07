@@ -13,7 +13,7 @@ export async function nbgrader(
   logger,
   opts: NBGraderAPIOptions
 ): Promise<NBGraderAPIResponse> {
-  logger.debug("nbgrader", opts);
+  logger.debug("nbgrader smc-project nbgrader api ", opts);
   client = client;
-  return { output: opts };
+  return { output: opts, autograde: null };
 }

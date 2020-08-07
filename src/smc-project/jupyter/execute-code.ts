@@ -234,6 +234,7 @@ export class CodeExecutionEmitter extends EventEmitter
     }
     this.state = "running";
     const dbg = this.kernel.dbg(`_execute_code('${trunc(this.code, 15)}')`);
+    console.log("_go dbg: ", dbg.name);
     dbg(`code='${this.code}'`);
     if (this.kernel.get_state() === "closed") {
       this.close();
