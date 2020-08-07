@@ -1647,10 +1647,6 @@ ${details}
         }
         console.log("nbgrader started 1 ", { student_id, file, student_path, assignment, grade_project_id});
         console.log("nbgrader started 2 ", { NBGRADER_TIMEOUT_MS, NBGRADER_CELL_TIMEOUT_MS});
-        const autograde_ipynb = create_autograde_ipynb(
-            instructor_ipynb,
-            student_ipynb
-        );
         //await this.write_autograded_notebook(
         //    assignment,
         //     student_id,
@@ -1678,6 +1674,7 @@ ${details}
         console.log("nbgrader finished successfully ", {
           student_id,
           file,
+          grade_project_id,
           r
         });
         result[file] = r;
@@ -1705,6 +1702,7 @@ ${details}
       this.nbgrader_set_is_done(assignment_id, student_id);
     }
     console.log("ran nbgrader for all files for a student", {
+      grade_project_id,
       student_id,
       result
     });
@@ -1728,7 +1726,7 @@ ${details}
 
       const notebook = JSON.parse(r.output);
       scores[filename] = extract_auto_scores(notebook);
-      console.log("extract_auto_scores ");
+      console.log("extract_auto_scores ", {student_id, grade_project_id});
       if (
         prev_scores != null &&
         prev_scores[filename] != null &&
@@ -1743,7 +1741,7 @@ ${details}
         }
       }
     }
-    console.log("scores ", scores);
+    console.log("scores ", {scores, student_id, grade_project_id});
     this.set_nbgrader_scores_for_one_student(
       assignment_id,
       student_id,
