@@ -1651,12 +1651,12 @@ ${details}
             instructor_ipynb,
             student_ipynb
         );
-        await this.write_autograded_notebook(
-            assignment,
-             student_id,
-             "to_grade_" + file,
-             autograde_ipynb
-        );
+        //await this.write_autograded_notebook(
+        //    assignment,
+        //     student_id,
+        //     "to_grade_" + file,
+        //     autograde_ipynb
+        //);
         const r = await nbgrader({
           timeout_ms: NBGRADER_TIMEOUT_MS, // default timeout for total notebook
             //store.getIn(
