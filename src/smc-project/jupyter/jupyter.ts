@@ -343,7 +343,7 @@ export class JupyterKernel extends EventEmitter
         try {
             this.process_comm_message_from_kernel(mesg);
         } catch (e) {
-            console.log("process_comm_message_from_kernel CATCH ", mesg);
+            console.log("process_comm_message_from_kernel CATCH ", JSON.stringify(mesg));
         }
 
         return;
@@ -852,8 +852,9 @@ export class JupyterKernel extends EventEmitter
 
   process_comm_message_from_kernel(mesg): void {
     const dbg = this.dbg("process_comm_message_from_kernel ");
-    console.log("process_comm_message_from_kernel ", mesg)
+    console.log("process_comm_message_from_kernel ", mesg);
     dbg(mesg);
+    console.log("process_comm_message_from_kernel err", this._actions);
     this._actions.process_comm_message_from_kernel(mesg);
   }
 
