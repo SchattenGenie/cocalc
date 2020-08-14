@@ -154,6 +154,7 @@ export class CodeExecutionEmitter extends EventEmitter
         this.kernel._clear_execute_code_queue();
       }
       // just bail; actual error would have been reported on iopub channel, hopefully.
+      console.log("dbg _finish bail", mesg);
       this._finish();
     } else {
       this._push_mesg(mesg);
@@ -191,6 +192,7 @@ export class CodeExecutionEmitter extends EventEmitter
   }
 
   _finish(): void {
+    console.log("_finish");
     if (this.state == "closed") {
       return;
     }

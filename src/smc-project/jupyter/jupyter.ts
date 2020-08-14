@@ -323,9 +323,15 @@ export class JupyterKernel extends EventEmitter
       this._kernel.config
     );
 
-    this._channels.shell.subscribe((mesg) => this.emit("shell", mesg));
+    this._channels.shell.subscribe((mesg) => {
+      console.log("shell  ", JSON.stringify(mesg));
+      this.emit("shell", mesg);
+    });
 
-    this._channels.stdin.subscribe((mesg) => this.emit("stdin", mesg));
+    this._channels.stdin.subscribe((mesg) => {
+      console.log("stdin  ", JSON.stringify(mesg));
+      this.emit("stdin", mesg);
+    });
 
     this._channels.iopub.subscribe((mesg) => {
       if (DEBUG) {
