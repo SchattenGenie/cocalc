@@ -97,6 +97,7 @@ export class CodeExecutionEmitter extends EventEmitter
 
   throw_error(err): void {
     this.emit("error", err);
+    console.log(`dbg throw_error --`, err);
     this.close();
   }
 
@@ -145,9 +146,11 @@ export class CodeExecutionEmitter extends EventEmitter
       return;
     }
     const dbg = this.kernel.dbg("_handle_shell");
+    console.log(`dbg got SHELL message -- ${JSON.stringify(mesg)}`);
     dbg(`got SHELL message -- ${JSON.stringify(mesg)}`);
     if ((mesg.content != null ? mesg.content.status : undefined) === "error") {
       if (this.halt_on_error) {
+        console.log("dbg halt_on_error");
         this.kernel._clear_execute_code_queue();
       }
       // just bail; actual error would have been reported on iopub channel, hopefully.
@@ -156,6 +159,7 @@ export class CodeExecutionEmitter extends EventEmitter
       this._push_mesg(mesg);
       this.shell_done = true;
       if (this.iopub_done && this.shell_done) {
+        console.log("dbg iopub_done shell_done", mesg);
         this._finish();
       }
     }
@@ -167,7 +171,7 @@ export class CodeExecutionEmitter extends EventEmitter
     }
     const dbg = this.kernel.dbg("_handle_iopub");
     dbg(`got IOPUB message -- ${JSON.stringify(mesg)}`);
-
+    console.log(`dbg got IOPUB message -- ${JSON.stringify(mesg)}`);
     this.iopub_done = this.killing || mesg.content?.execution_state == "idle";
 
     if (mesg.content?.comm_id != null) {
@@ -181,6 +185,7 @@ export class CodeExecutionEmitter extends EventEmitter
     }
 
     if (this.iopub_done && this.shell_done) {
+      console.log('dbg shell_done -- finish');
       this._finish();
     }
   }
@@ -262,6 +267,7 @@ export class CodeExecutionEmitter extends EventEmitter
   private async timeout(): Promise<void> {
     const dbg = this.kernel.dbg("CodeExecutionEmitter.timeout");
     if (this.state == "closed") {
+      console.log('dbg CodeExecutionEmitter closed');
       dbg("already finished, so nothing to worry about");
       return;
     }
@@ -269,6 +275,7 @@ export class CodeExecutionEmitter extends EventEmitter
     let tries = 3;
     let d = 1000;
     while (this.state != ("closed" as State) && tries > 0) {
+      console.log('dbg code still running, so try to interrupt it');
       dbg("code still running, so try to interrupt it");
       // Code still running but timeout reached.
       // Keep sending interrupt signal, which will hopefully do something to
@@ -280,6 +287,7 @@ export class CodeExecutionEmitter extends EventEmitter
       tries -= 1;
     }
     if (this.state != ("closed" as State)) {
+      console.log("now try SIGKILL, which should kill things for sure.");
       dbg("now try SIGKILL, which should kill things for sure.");
       this.kernel.signal("SIGKILL");
       this._finish();
