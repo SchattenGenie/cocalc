@@ -531,6 +531,7 @@ export class JupyterKernel extends EventEmitter
 
   // public, since we do use it from some other places...
   public dbg(f: string, trunc: number = 1000): Function {
+    console.log("dbg ", f);
     if (!this._dbg) {
       return function () {};
     } else {
