@@ -654,7 +654,7 @@ spec:
           memory: "{memory}Mi"
         requests:
           cpu: {cpu_shares}m
-          memory: 9000Mi
+          memory: 300Mi
       volumeMounts:
         - name: home
           mountPath: /home/user
